@@ -1,5 +1,6 @@
 # encoding: utf-8
 require_relative 'chess_board'
+require_relative 'computer_player'
 
 class Game
   attr_reader :board, :player1, :player2
@@ -12,26 +13,19 @@ class Game
   end
 
   def get_players
-    puts "Player 1 human?(y/n)"
+    print "White Pieces: Human Player (y/n)?"
     p1 = gets.chomp.downcase
 
-    puts "Player 2 human?(y/n)"
+    print "Black Pieces: Human Player (y/n)?"
     p2 = gets.chomp.downcase
 
     create_players(p1, p2)
   end
 
   def create_players(p1, p2)
-    if p1 == "y"
-      @player1 = HumanPlayer.new(:white)
-    else
-      @player1 = ComputerPlayer.new(:white, board)
-    end
-    if p2 == "y"
-      @player2 = HumanPlayer.new(:black)
-    else
-      @player2 = ComputerPlayer.new(:black, board)
-    end
+    @player1 = p1 == "y" ? HumanPlayer.new(:white) : ComputerPlayer.new(:white, board)
+
+    @player2 = p2 == "y" ? HumanPlayer.new(:black) : ComputerPlayer.new(:black, board)
   end
 
   def play
@@ -63,10 +57,11 @@ class Game
   def check_result
     if board.check_mate?(turn.color)
       toggle_turn
-      puts "#{turn.color} wins!"
+      puts "CHECKMATE! #{turn.color} wins!"
     else
-      puts "Stalemate!"
+      puts "It's a stalemate!"
     end
+    nil
   end
 
 end
@@ -96,46 +91,5 @@ class HumanPlayer
     input[0], input[1] = 8 - input[1].to_i, input[0].downcase.ord - 97
 
     input
-  end
-end
-
-class ComputerPlayer
-  attr_accessor :color
-
-  def initialize(color, board)
-    @board = board
-    @color = color
-  end
-
-  def get_move
-    return find_checkmate unless find_checkmate.nil?
-
-    piece = select_random_piece
-    move = select_random_move(piece)
-
-    [piece.pos, move]
-  end
-
-  def select_random_piece
-    @board.pieces(:color => @color).select{|piece| piece.legal_moves.any?}.sample
-  end
-
-  def select_random_move(piece)
-    piece.legal_moves.sample
-  end
-
-  def find_checkmate
-    @board.pieces(:color => color).each do |piece|
-      piece.legal_moves.each do |end_move|
-
-        dupe = @board.dup
-
-        dupe[piece.pos].move(end_move)
-
-        opp_color = color == :white ? :black : :white
-        return [piece.pos, end_move] if dupe.check_mate?(opp_color)
-      end
-    end
-    nil
   end
 end

@@ -13,10 +13,6 @@ class Piece
     self.pos = end_pos
   end
 
-  # def legal_moves
-  #   pos_moves.select {|pos| !move_into_check?(pos) }
-  # end
-
   def move_into_check?(end_pos)
     dupe = board.dup
 

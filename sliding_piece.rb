@@ -1,6 +1,6 @@
 # encoding: utf-8
 class SlidingPiece < Piece
-  # Bishop, Queen, Rook
+  # Bishops, Queens, and Rooks!
 
   def initialize(board, color, pos, symbol, *directions) # :rows, :cols, :diags
     super(board, color, pos, symbol)

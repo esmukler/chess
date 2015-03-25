@@ -14,11 +14,9 @@ class Board
   end
 
   def game_over?(color)
+    return true if pieces().count <= 2
     pieces(:color => color).each do |piece|
-      if !piece.legal_moves.empty?
-        #p piece.symbol
-        return false
-      end
+      return false if piece.legal_moves.any?
     end
     true
   end
@@ -50,11 +48,10 @@ class Board
     options[:color] = options[:color] == :black ? :white : :black if options[:opp]
 
     #flatten rows and select pieces (of color or opposite)
-    `# test = `
-    @rows.flatten.select {|tile| !tile.nil? &&
-        (tile.color == options[:color] || options[:color] == :all) }
-    # test.each {|tile| print tile.symbol}
-    # nil
+    @rows.flatten.select do |tile|
+      !tile.nil? &&
+      (tile.color == options[:color] || options[:color] == :all)
+      end
   end
 
   def move(start_pos, end_pos, turn_color)
@@ -130,9 +127,10 @@ class Board
 
   def display_board
     puts
-    shade = :light_blue
+    shade = :light_red
     @rows.each_with_index do |array, row|
-      shade = shade == :light_blue ? :light_green : :light_blue
+      puts "#{9 - row}" unless row == 0
+      shade = shade == :light_red ? :light_white : :light_red
       array.each_index do |col|
 
         if self[[row,col]].nil?
@@ -140,10 +138,12 @@ class Board
         else
           print " #{self[[row,col]].symbol} ".colorize(:background => shade)
         end
-        shade = shade == :light_blue ? :light_green : :light_blue
+        shade = shade == :light_red ? :light_white : :light_red
       end
-    puts
     end
+    puts "1"
+    puts " A  B  C  D  E  F  G  H  "
     nil
   end
+  nil
 end

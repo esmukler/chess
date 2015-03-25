@@ -5,17 +5,20 @@ class Pawn < Piece
     super(board, color, pos, symbol)
   end
 
-  def all_moves # overriding piece method
+  def all_moves
+    # modify direction for black vs. white pieces
     modifier = color == :white ? -1 : 1
     legal_moves_array = []
 
+    # one-square moves
     legal_moves_array << [1 * modifier + pos[0], pos[1]]
 
+    # two-square moves only from the starting pos.
     if starting_pos?
       legal_moves_array << [2 * modifier + pos[0], pos[1]]
     end
 
-    # filter for square on the board
+    # filter moves for only squares on the board
     legal_moves_array.select! do |legal_pos|
       legal_pos[0].between?(0,7) && legal_pos[1].between?(0,7)
     end
@@ -23,12 +26,8 @@ class Pawn < Piece
     # only move to nil squares
     legal_moves_array.select!{|legal_pos| board[legal_pos].nil?}
 
-
+    # add in possible attack moves
     all_moves = legal_moves_array.concat(attack_moves(modifier))
-
-    # if pos[0] == 7 || pos[0] == 0
-    #   all_moves = []
-    # end
 
     all_moves
   end
@@ -63,6 +62,8 @@ class Pawn < Piece
 
   def move(end_pos)
     super(end_pos)
+
+    # pawn promotion
     if @pos[0] == 7 && color == :black
       board[@pos] = SlidingPiece.new(@board, :black, pos, "\u{265B}", :rows, :cols, :diags)
     elsif @pos[0] == 0 && color == :white
