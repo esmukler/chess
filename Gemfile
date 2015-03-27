@@ -1,1 +1,1 @@
-gem install colorize
+gem 'colorize'
