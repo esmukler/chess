@@ -9,7 +9,7 @@ The world's favorite game of skill!
 * Follow the instructions in the commmand line to play!
 * Choose single-player, multi-player, or watch two computer players battle it out!
 
-## Features and Specs
+## Features:
 * Written in the Ruby programming language.
 * Includes a basic computer player AI:
     * Moves to checkmate when available.
