@@ -1,6 +1,6 @@
 # encoding: utf-8
-require_relative 'chess_board'
-require_relative 'computer_player'
+require_relative 'lib/chess_board'
+require_relative 'lib/computer_player'
 
 class Game
   attr_reader :board, :player1, :player2
